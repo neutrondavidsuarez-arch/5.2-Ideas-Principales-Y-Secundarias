@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioLearning - Tema 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init({ publicKey: "3LjnpLaDboHWv0VPY" });
+        })();
+    </script>
+    <style>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .iframe-container { position: relative; width: 100%; height: 75vh; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .nav-btn { transition: all 0.3s ease; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .nav-btn:hover { transform: translateY(-2px); }
+        .nav-btn.active { border-color: #10b981; color: #10b981; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .dot-pulse { animation: pulse-dot 1.2s infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans min-h-screen">
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+                <div class="text-center lg:text-left">
+                    <h1 class="text-xl font-black text-emerald-600 tracking-tight">UNIDAD 1</h1>
+                    <p class="text-slate-500 font-bold text-xs uppercase">Tema 5.1: Estrategias de comprensión lectora</p>
+                </div>
+                
+                <nav class="flex flex-wrap justify-center gap-1 md:gap-4">
+                    <button onclick="prepQuiz('deber', this)" class="nav-btn active px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📚</span> Practica
+                    </button>
+                    <button onclick="prepQuiz('evaluacion', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📝</span> Repaso
+                    </button>
+                    <button onclick="prepQuiz('extra', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📊</span> Evaluación
+                    </button>
+                    <button onclick="showSection('pdf', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>📋</span> Pizarra
+                    </button>
+                    <button onclick="showSection('video', this)" class="nav-btn px-3 py-2 font-bold text-slate-700 flex items-center gap-2">
+                        <span>🎥</span> Video
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main id="app" class="max-w-5xl mx-auto p-6">
+    </main>
+    <script>
+        const DRIVE_PDF_URL = "https://drive.google.com/file/d/1tPdsfPZVt-oOM-a1YmCbr8oMPMprzbl2/view?usp=sharing";
+        const DRIVE_VIDEO_URL = "https://drive.google.com/file/d/1GdrzGCZvmDtz_sHZogW4ijLBEXfeOyCk/view?usp=sharing";
+
+        // PRINCIPAL (Práctica + Repaso)
+        const quizData = [
+           { question: 'Ideas principales y secundarias <br> Indique si los siguientes enunciados son Verdaderos (V) o Falsos (F) según el texto: <br> 1) La idea principal puede suprimirse sin que el texto pierda sentido. <br> 2) Las ideas secundarias aportan ejemplos y detalles. <br> 3) La idea principal siempre está explícita. <br> 4) Las ideas secundarias dependen de la idea principal.', options: ['V-V-V-V', 'F-V-F-V', 'V-F-V-F', 'F-V-F-F'], answer: 'F-V-F-V', explanation: 'B) F-V-F-V <br> Explicación: <br> 1 es Falsa (si se elimina la idea principal el texto pierde sentido). <br> 2 es Verdadera (las secundarias aportan ejemplos, detalles y datos). <br> 3 es Falsa (puede estar implícita). <br> 4 es Verdadera (dependen y se subordinan a la principal)..', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ideas principales <br> Complete la analogía: <br> Idea principal es a esencia como idea secundaria es a ________.', options: ['fundamental', 'complemento', 'eliminable', 'central'], answer: 'complemento', explanation: 'B) complemento <br> Explicación: La idea principal es la esencia del texto; las secundarias la complementan con detalles, ejemplos o aclaraciones.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Características de las ideas principales <br> ¿Cuál NO es una característica de la idea principal?', options: ['Expresa el punto central del tema.', 'No depende de otras ideas.', 'Incluye detalles y ejemplos.', 'Si se elimina, el texto pierde sentido.'], answer: 'Incluye detalles y ejemplos.', explanation: 'C) Incluye detalles y ejemplos. <br> Explicación: Los detalles y ejemplos son propios de las ideas secundarias. La principal es general y nuclear.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Organizadores gráficos <br> Complete el texto: <br> "Los organizadores gráficos son herramientas ________ que permiten ________ la información y visualizar ________ entre conceptos."', options: ['auditivas – memorizar – diferencias', 'visuales – estructurar – relaciones', 'textuales – copiar – jerarquías', 'digitales – eliminar – conexiones'], answer: 'visuales – estructurar – relaciones', explanation: 'B) visuales – estructurar – relaciones <br> Explicación: Son herramientas visuales que ayudan a organizar y mostrar las relaciones entre ideas.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Relacione cada organizador gráfico con su función principal: <br> Organizador <br> <br> 1. Diagrama de Venn <br> 2. Línea de tiempo <br> 3. Mapa conceptual <br> 4. Diagrama de causa-efecto <br> <br> Función <br> a) Ordenar eventos cronológicamente <br> b) Mostrar similitudes y diferencias <br> c) Identificar causas de un problema <br> d) Jerarquizar conceptos', options: ['1b 2a 3d 4c', '1a 2b 3c 4d', '1d 2c 3b 4a', '1c 2d 3a 4b'], answer: '1b 2a 3d 4c', explanation: '<br> 1. Diagrama de Venn &rarr; b) Mostrar similitudes y diferencias <br> 2. Línea de tiempo &rarr; a) Ordenar eventos cronológicamente <br> 3. Mapa conceptual &rarr; d) Jerarquizar conceptos <br> 4. Diagrama de causa-efecto &rarr; c) Identificar causas de un problema <br> Respuesta correcta: A) 1b 2a 3d 4c <br> Explicación: Cada organizador tiene una función específica que coincide exactamente con la descripción dada.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene los pasos para interpretar una tabla: <br> 1) Identificar ejes y variables <br> 2) Leer el título <br> 3) Comparar datos y buscar tendencias <br> 4) Revisar leyendas y notas', options: ['2-1-4-3', '1-2-3-4', '4-3-2-1', '2-4-1-3'], answer: '2-4-1-3', explanation: 'D) 2-4-1-3 <br> Explicación: Primero se lee el título, luego las leyendas/notas, después se identifican variables y finalmente se comparan datos.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: <br> “La Revolución Industrial no solo transformó la economía, sino también la estructura social. Surgieron nuevas clases, como el proletariado, y se aceleró el crecimiento urbano.” <br> ¿Cuál es la idea principal?', options: ['Surgió el proletariado.', 'Crecimiento urbano acelerado.', 'Transformación económica y social por la Revolución Industrial.', 'La economía cambió.'], answer: 'Transformación económica y social por la Revolución Industrial.', explanation: 'C) Transformación económica y social por la Revolución Industrial. <br> Explicación: El texto presenta un cambio global (económico + social). El resto son ideas secundarias o parciales.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “El uracilo hallado en el asteroide Ryugu sugiere que compuestos extraterrestres influyeron en el origen de la vida en la Tierra.” <br> ¿Qué idea secundaria se menciona?', options: ['El uracilo es un componente del ARN.', 'La sonda tomó muestras del asteroide.', 'Los asteroides contienen aminoácidos.', 'El origen de la vida es exclusivo de la Tierra.'], answer: 'La sonda tomó muestras del asteroide.', explanation: 'B) La sonda tomó muestras del asteroide. <br> Explicación: El texto no menciona explícitamente que la sonda tomó muestras, pero es la información secundaria más cercana a lo que se da (el hallazgo implica el muestreo). Las demás no aparecen o son incorrectas.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuál es el organizador gráfico más adecuado para comparar dos teorías sociológicas?', options: ['Línea de tiempo', 'Diagrama de Venn', 'Mapa mental', 'Gráfico de barras'], answer: 'Diagrama de Venn', explanation: 'B) Diagrama de Venn <br> Explicación: El Diagrama de Venn es ideal para mostrar similitudes y diferencias entre dos conceptos o teorías.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione dos características de las ideas principales: <br> 1) Son eliminables sin afectar el sentido global. <br> 2) Expresan el mensaje central. <br> 3) Dependen de las ideas secundarias. <br> 4) Articulan y dan coherencia al texto.', options: ['1 y 2', '2 y 3', '3 y 4', '2 y 4'], answer: '2 y 4', explanation: 'D) 2 y 4 <br> Explicación: Las ideas principales expresan el mensaje central y dan coherencia. No son eliminables ni dependen de las secundarias.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione tres estrategias para identificar ideas principales: <br> 1) Preguntarse: “¿De qué trata el texto?” <br> 2) Buscar oraciones temáticas al inicio o final. <br> 3) Subrayar todos los adjetivos. <br> 4) Eliminar todas las ideas secundarias. <br> 5) Usar la abstracción para reducir el texto a su esencia. <br> 6) Contar el número de párrafos.', options: ['1, 2, 5', '2, 3, 6', '3, 4, 5', '1, 4, 6'], answer: '1, 2, 5', explanation: 'A) 1, 2, 5 <br> Explicación: Preguntarse de qué trata el texto, buscar oraciones temáticas y usar la abstracción son estrategias válidas. Subrayar adjetivos o contar párrafos no lo son.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Causa: Un estudiante usa un diagrama de causa-efecto para analizar un problema social. <br> Efecto: …', options: ['Logra identificar los orígenes del problema.', 'Ordena eventos cronológicamente.', 'Compara dos teorías.', 'Sintetiza proporciones de un todo.'], answer: 'Logra identificar los orígenes del problema.', explanation: 'A) Logra identificar los orígenes del problema. <br> Explicación: Esa es precisamente la función del diagrama de causa-efecto.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene las palabras para formar la definición correcta: <br> "central – es – del – idea – texto – la – principal"', options: ['La idea principal es central del texto.', 'La idea central es principal del texto.', 'La idea principal del texto es central.', 'La idea del texto principal es central.'], answer: 'La idea principal del texto es central.', explanation: 'C) La idea principal del texto es central. <br> Explicación: Es la única opción gramatical y semánticamente correcta.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Si un gráfico circular muestra: 60% Agricultura, 25% Industria, 15% Servicios, ¿qué inferencia es válida?', options: ['La industria es el sector predominante.', 'El sector servicios es el mayor.', 'La agricultura es la actividad principal.', 'No hay sector industrial.'], answer: 'La agricultura es la actividad principal.', explanation: 'C) La agricultura es la actividad principal. <br> Explicación: El sector con mayor porcentaje es el predominante.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Indique si los siguientes enunciados son Verdaderos (V) o Falsos (F): <br> 1) Los mapas conceptuales sirven para ordenar eventos en el tiempo. <br> 2) Las líneas de tiempo muestran relaciones jerárquicas. <br> 3) Los diagramas de Venn son útiles para comparar. <br> 4) Las tablas comparativas organizan datos en filas y columnas.', options: ['F-F-V-V', 'V-V-F-F', 'F-V-F-V', 'V-F-V-F'], answer: 'F-F-V-V', explanation: ' <br> 1. Mapas conceptuales &rarr;  ordenar eventos en el tiempo &rarr;  F <br> 2. Líneas de tiempo &rarr;  relaciones jerárquicas &rarr;  F <br> 3. Diagramas de Venn &rarr;  comparar &rarr;  V <br> 4. Tablas comparativas &rarr;  filas y columnas &rarr;  V <br> Respuesta correcta: A) F-F-V-V.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete la analogía: <br> Texto narrativo es a entretener como texto argumentativo es a ________.', options: ['informar', 'persuadir', 'describir', 'enumerar'], answer: 'persuadir', explanation: 'B) persuadir <br> Explicación: El propósito principal del texto argumentativo es convencer o persuadir.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuál NO es una estrategia de lectura comprensiva?', options: ['Identificar el género textual', 'Subrayar ideas principales', 'Ignorar títulos y subtítulos', 'Formular preguntas de reflexión'], answer: 'Ignorar títulos y subtítulos', explanation: 'C) Ignorar títulos y subtítulos <br> Explicación: Los títulos y subtítulos orientan la lectura; ignorarlos es contraproducente.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete: <br> "Las ideas secundarias ________ la idea principal con ________, ejemplos o datos ________."', options: ['contradicen – opiniones – centrales', 'complementan – detalles – accesorios', 'eliminan – resúmenes – esenciales', 'sustituyen – gráficos – principales'], answer: 'complementan – detalles – accesorios', explanation: 'B) complementan – detalles – accesorios <br> Explicación: Las secundarias complementan la principal con detalles y datos accesorios.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Relacione cada género textual con su estructura típica: <br> <br> Género <br> 1) Narrativo <br> 2) Argumentativo <br> 3) Expositivo <br> <br> Estructura <br> a) Tesis - argumentos – conclusión <br> b) Introducción - nudo – desenlace <br> c) Idea principal - detalles - ejemplos - conclusión', options: ['1b - 2a - 3c', '1a - 2c - 3b', '1c - 2b - 3a', '1b - 2c - 3a'], answer: '1b - 2a - 3c', explanation: ' <br> 1. Narrativo &rarr;  b) Introducción-nudo-desenlace <br> 2. Argumentativo &rarr;  a) Tesis-argumentos-conclusión <br> 3. Expositivo &rarr;  c) Idea principal-detalles-ejemplos-conclusión <br> Respuesta correcta: A) 1b - 2a - 3c.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene los pasos para interpretar una tabla: <br> 1) Identificar variables <br> 2) Leer título <br> 3) Inferir tendencias <br> 4) Revisar notas al pie', options: ['2-1-4-3', '1-2-3-4', '4-3-2-1', '2-4-1-3'], answer: '2-1-4-3', explanation: 'A) 2-1-4-3 <br> Explicación: Título &rarr;  variables &rarr;  notas &rarr;  inferencias/tendencias.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “La globalización ha facilitado el intercambio cultural y económico, pero también ha generado desigualdades entre países desarrollados y en vías de desarrollo.” <br> ¿Cuál es la idea principal?', options: ['Intercambio cultural', 'Desigualdades entre países', 'Globalización con efectos positivos y negativos', 'Países en vías de desarrollo'], answer: 'Globalización con efectos positivos y negativos', explanation: 'C) Globalización con efectos positivos y negativos <br> Explicación: El texto presenta ambos lados del fenómeno.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “Un gráfico de barras muestra el porcentaje de población con acceso a internet: Europa 85%, Asia 45%, África 22%.” <br> ¿Qué se puede inferir?', options: ['Europa tiene la menor conectividad.', 'África tiene la mayor brecha digital.', 'Asia tiene igual acceso que Europa.', 'No hay diferencias significativas.'], answer: 'África tiene la mayor brecha digital.', explanation: 'B) África tiene la mayor brecha digital. <br> Explicación: Tiene el porcentaje más bajo (22 %).', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuál organizador gráfico es más adecuado para mostrar la evolución de la democracia en un país?', options: ['Diagrama de Venn', 'Línea de tiempo', 'Mapa conceptual', 'Diagrama de causa-efecto'], answer: 'Línea de tiempo', explanation: 'B) Línea de tiempo <br> Explicación: La evolución temporal se representa mejor con una línea de tiempo.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione dos beneficios de los organizadores gráficos: <br> 1) Saturan con detalles innecesarios <br> 2) Favorecen la memoria visual <br> 3) Dificultan el análisis <br> 4) Mejoran la comprensión', options: ['1 y 2', '2 y 3', '3 y 4', '2 y 4'], answer: '2 y 4', explanation: 'D) 2 y 4 (Favorecen la memoria visual y Mejoran la comprensión) <br> Explicación: Son las dos ventajas reales; las otras son desventajas.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione tres estrategias para una lectura comprensiva: <br> 1) Identificar género textual <br> 2) Ignorar el título <br> 3) Activar conocimientos previos <br> 4) Hacer inferencias <br> 5) Evitar preguntas <br> 6) Subrayar ideas principales', options: ['1, 3, 4', '2, 4, 6', '3, 5, 6', '1, 2, 5'], answer: '1, 3, 4', explanation: 'A) 1, 3, 4 <br> Explicación: Identificar género, activar conocimientos previos y hacer inferencias son estrategias válidas.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Causa: Un texto incluye muchas ideas secundarias. <br> Efecto: …', options: ['El texto se vuelve confuso y pierde enfoque.', 'La idea principal se fortalece automáticamente.', 'El texto se hace más corto.', 'Las ideas principales se eliminan.'], answer: 'El texto se vuelve confuso y pierde enfoque.', explanation: 'A) El texto se vuelve confuso y pierde enfoque. <br> Explicación: El exceso de detalles secundarios puede desviar la atención de la idea principal.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene: <br> "visuales – organizadores – gráficos – herramientas – son"', options: ['Los organizadores gráficos son herramientas visuales.', 'Herramientas visuales son organizadores gráficos.', 'Organizadores son herramientas gráficas visuales.', 'Gráficos visuales son herramientas organizadoras.'], answer: 'Los organizadores gráficos son herramientas visuales.', explanation: 'A) Los organizadores gráficos son herramientas visuales.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Si un párrafo habla sobre "las causas de la migración rural-urbana: falta de empleo, educación y servicios básicos", ¿cuál es la idea principal?', options: ['Falta de empleo', 'Migración rural-urbana y sus causas', 'Servicios básicos en zonas rurales', 'Educación en ciudades'], answer: 'Migración rural-urbana y sus causas', explanation: 'B) Migración rural-urbana y sus causas <br> Explicación: El tema general incluye el fenómeno y sus causas.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Indique si los siguientes enunciados son Verdaderos (V) o Falsos (F): <br> 1) Las notas al pie en una tabla aclaran detalles metodológicos. <br> 2) El título de una tabla es opcional. <br> 3) Los ejes son relevantes solo en gráficos, no en tablas. <br> 4) Comparar datos ayuda a identificar tendencias.', options: ['V-F-F-V', 'F-V-V-F', 'V-V-F-F', 'F-F-V-V'], answer: 'V-F-F-V', explanation: 'A) V-F-F-V <br> Explicación: <br> 1. V (las notas aclaran), <br> 2. F (el título es esencial), <br> 3. F (también hay encabezados en tablas), <br> 4. V (comparar datos permite ver tendencias).', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete la analogía: <br> Mapa conceptual es a jerarquía como línea de tiempo es a ________.', options: ['comparación', 'cronología', 'causa', 'proporción'], answer: 'cronología', explanation: 'B) cronología.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuál NO es un elemento esencial para interpretar una tabla?', options: ['Título', 'Leyendas o notas', 'Número de párrafos del texto', 'Variables o encabezados'], answer: 'Número de párrafos del texto', explanation: 'C) Número de párrafos del texto <br> Explicación: No tiene relación con la lectura de la tabla.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete: <br> "Los textos ________ tienen como objetivo informar o explicar, mientras que los textos ________ buscan persuadir al lector."', options: ['narrativos – expositivos', 'expositivos – argumentativos', 'argumentativos – narrativos', 'descriptivos – expositivos'], answer: 'expositivos – argumentativos', explanation: 'B) expositivos – argumentativos <br> Explicación: Expositivos informan/explican; argumentativos persuaden.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Relacione cada ejemplo con su tipo: <br> <br> Ejemplo <br> 1) "La pandemia aumentó el desempleo global." <br> 2) "En 2020, el turismo cayó un 60%." <br> <br> Tipo <br> A) Idea secundaria <br> B) Idea principal', options: ['1A - 2B', '1B - 2A', '1A - 2A', '1B - 2B'], answer: '1B - 2A', explanation: ' <br> 1. “La pandemia aumentó el desempleo global.” &rarr;  Idea principal <br> 2. “En 2020, el turismo cayó un 60 %.” &rarr;  Idea secundaria <br> Respuesta correcta: B) 1B - 2A.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene los pasos para elaborar un organizador gráfico: <br> Elegir el tipo de organizador <br> Identificar ideas principales y secundarias <br> Completar con palabras clave <br> Interpretar relaciones', options: ['2-1-3-4', '1-2-3-4', '3-2-1-4', '4-3-2-1'], answer: '2-1-3-4', explanation: 'A) 2-1-3-4 <br> Explicación: Primero se identifican las ideas, luego se elige el tipo de organizador, se completa y se interpretan las relaciones.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “El cambio climático afecta los polos: el hielo se derrite, la fauna polar migra y el nivel del mar sube.” <br> ¿Qué idea secundaria se menciona?', options: ['El cambio climático es un problema global.', 'La fauna polar migra.', 'Los polos se enfrían.', 'El nivel del mar baja.'], answer: 'La fauna polar migra.', explanation: 'B) La fauna polar migra. <br> Explicación: Es un detalle concreto que apoya la idea principal.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Organizadores gráficos <br> Texto: “Un diagrama de Venn muestra: <br> - Características de sociología: estudia sociedades industrializadas. <br> - Características de antropología: estudia sociedades no industrializadas. <br> - Intersección: ambas estudian la sociedad.” <br> ¿Qué muestra la intersección?', options: ['Diferencias entre disciplinas', 'Similitud entre disciplinas', 'Cronología de su desarrollo', 'Causas de su origen'], answer: 'Similitud entre disciplinas', explanation: 'B) Similitud entre disciplinas <br> Explicación: La intersección muestra lo que tienen en común.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Qué pregunta ayuda a identificar la idea principal?', options: ['¿Cuántas palabras tiene el texto?', '¿De qué trata el texto en una frase?', '¿Quién es el autor?', '¿Cuándo se publicó?'], answer: '¿De qué trata el texto en una frase?', explanation: 'B) ¿De qué trata el texto en una frase?.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione dos pasos para leer un gráfico: <br> 1) Ignorar el título <br> 2) Identificar ejes y variables <br> 3) Comparar datos <br> 4) Suprimir leyendas', options: ['1 y 2', '2 y 3', '3 y 4', '1 y 4'], answer: '2 y 3', explanation: 'B) 2 y 3 (Identificar ejes y variables + Comparar datos).', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione tres tipos de representaciones visuales: <br> 1) Gráfico de barras <br> 2) Novela dramática <br> 3) Gráfico circular <br> 4) Diagrama de flujo <br> 5) Poema lírico <br> 6) Mapa conceptual', options: ['1, 3, 4', '2, 4, 6', '3, 5, 6', '1, 2, 5'], answer: '1, 3, 4', explanation: 'A) 1, 3, 4 (Gráfico de barras, Gráfico circular, Diagrama de flujo).', multi: 'OFF', maxSelect: 1 },
+            { question: 'Causa: Un estudiante usa un mapa conceptual para estudiar. <br> Efecto: …', options: ['Logra jerarquizar conceptos y sus relaciones.', 'Ordena eventos históricos.', 'Compara dos autores.', 'Identifica causas de un conflicto.'], answer: 'Logra jerarquizar conceptos y sus relaciones.', explanation: 'A) Logra jerarquizar conceptos y sus relaciones.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene: <br> "comprensión – global – idea – principal – la – esencial – es – para – la"', options: ['La idea principal es esencial para la comprensión global.', 'La comprensión global es esencial para la idea principal.', 'Esencial es la idea principal para la comprensión global.', 'Para la comprensión global la idea principal es esencial.'], answer: 'La idea principal es esencial para la comprensión global.', explanation: 'A) La idea principal es esencial para la comprensión global.', multi: 'OFF', maxSelect: 1 },
+            { question: 'En el texto: “La publicidad influye en el consumo. Usa colores llamativos y frases persuasivas.”, ¿cuál es la idea secundaria?', options: ['La publicidad influye en el consumo.', 'Usa colores llamativos y frases persuasivas.', 'El consumo es voluntario.', 'La publicidad es innecesaria.'], answer: 'Usa colores llamativos y frases persuasivas.', explanation: 'B) Usa colores llamativos y frases persuasivas.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Indique si los siguientes enunciados son Verdaderos (V) o Falsos (F): <br> 1) Activar conocimientos previos ayuda a la comprensión. <br> 2) Releer pasajes confusos es inútil. <br> 3) Subrayar ideas principales facilita el estudio. <br> 4) Hacer pausas para reflexionar distrae.', options: ['V-F-V-F', 'F-V-F-V', 'V-V-F-F', 'F-F-V-V'], answer: 'V-F-V-F', explanation: 'A) V-F-V-F <br> Explicación: <br> 1 V, 2 F (releer sí sirve), 3 V, 4 F (reflexionar ayuda).', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete la analogía: <br> Texto expositivo es a informar como texto narrativo es a ________.', options: ['persuadir', 'entretener', 'debatir', 'cuantificar'], answer: 'entretener', explanation: 'B) entretener.', multi: 'OFF', maxSelect: 1 },
+            { question: '¿Cuál NO es un organizador gráfico?', options: ['Diagrama de Venn', 'Línea de tiempo', 'Mapa conceptual', 'Párrafo descriptivo'], answer: 'Párrafo descriptivo', explanation: 'D) Párrafo descriptivo.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete: <br> "Las inferencias permiten leer ________ líneas, extrayendo información no ________."', options: ['entre – explícita', 'sobre – importante', 'bajo – clara', 'tras – relevante'], answer: 'entre – explícita', explanation: 'A) entre – explícita <br> Explicación: “Leer entre líneas” = información no explícita.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Relacione cada tipo de texto con su elemento clave: <br> <br> Texto <br> 1. Argumentativo <br> 2. Narrativo <br> 3. Expositivo <br> <br> Elemento clave <br> a) Personajes y trama <br> b) Datos y evidencias <br> c) Tesis y argumentos', options: ['1c - 2a - 3b', '1a - 2b - 3c', '1b - 2c - 3a', '1c - 2b - 3a'], answer: '1c - 2a - 3b', explanation: 'A) 1c - 2a - 3b <br> (Argumentativo &rarr; tesis y argumentos; Narrativo &rarr; personajes y trama; Expositivo &rarr; datos y evidencias).', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene las etapas de la lectura comprensiva: <br> 1) Identificar ideas principales <br> 2) Activar conocimientos previos <br> 3) Formular preguntas <br> 4) Evaluar comprensión', options: ['2-1-3-4', '1-2-3-4', '3-2-1-4', '4-3-2-1'], answer: '2-1-3-4', explanation: 'A) 2-1-3-4 <br> (Activar conocimientos previos &rarr; Identificar ideas principales &rarr; Formular preguntas &rarr; Evaluar comprensión).', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “Tras la crisis, el gobierno aplicó medidas de austeridad. La población protestó en las calles.” <br> ¿Qué se puede inferir?', options: ['Las medidas fueron populares.', 'Hubo descontento social.', 'La crisis se solucionó rápido.', 'No hubo reacción ciudadana.'], answer: 'Hubo descontento social.', explanation: 'B) Hubo descontento social. <br> Explicación: Las protestas indican descontento.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “Tabla: Pobreza en Argentina: 2002: 34,9%; 2010: 8,6%.” <br> ¿Qué tendencia muestra?', options: ['Aumento de la pobreza', 'Estabilidad en los índices', 'Reducción de la pobreza', 'No hay tendencia clara'], answer: 'Reducción de la pobreza', explanation: 'C) Reducción de la pobreza <br> Explicación: Baja de 34,9 % a 8,6 %.', multi: 'OFF', maxSelect: 1 },
+        ];
+
+        // EVALUACIÓN (16 preguntas)
+        const quizDataExtra = [
+            { question: 'Ideas principales y secundarias. <br> Selecciona la opción que contiene las afirmaciones correctas. <br> Enunciados: <br> 1. La idea principal expresa la esencia del mensaje del autor. <br> 2. Las ideas secundarias complementan la idea principal con detalles. <br> 3. La idea principal siempre se encuentra al inicio del texto. <br> 4. Las ideas secundarias pueden suprimirse sin afectar el mensaje central. <br> 5. La idea principal depende de las ideas secundarias para su comprensión. <br> 6. Las ideas secundarias siempre incluyen ejemplos y fechas.', options: ['1, 2, 4', '2, 3, 5', '3, 4, 6', '1, 5, 6'], answer: '1, 2, 4', explanation: 'La idea principal es el mensaje central del texto y no depende de otras ideas; si se elimina, el texto pierde coherencia. Las ideas secundarias complementan con detalles, ejemplos o explicaciones, y pueden omitirse sin alterar el significado global. La idea principal no siempre está al inicio (puede estar implícita o al final), y las ideas secundarias no necesariamente incluyen fechas o ejemplos (pueden ser descripciones u otros datos). La idea principal es autónoma, mientras que las secundarias dependen de ella.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Organizadores gráficos. <br> Selecciona la opción que contiene las afirmaciones correctas. <br> 1. Los diagramas de Venn se usan para representar proporciones. <br> 2. Los mapas conceptuales muestran la jerarquía entre ideas. <br> 3. Los diagramas de flujo se utilizan para secuenciar eventos en el tiempo. <br> 4. Las líneas de tiempo ayudan a entender la cronología de eventos. <br> 5. Los organizadores gráficos no mejoran la memoria. <br> 6. Las tablas son útiles para comparar valores exactos.', options: ['1, 3, 5', '2, 4, 6', '1, 2, 3', '4, 5, 6'], answer: '2, 4, 6', explanation: 'Los mapas conceptuales representan relaciones jerárquicas entre conceptos, las líneas de tiempo ordenan eventos cronológicamente, y las tablas permiten comparar datos de manera precisa. Los diagramas de Venn se usan para comparar y contrastar elementos, no para proporciones (para eso sirven los gráficos circulares). Los diagramas de flujo ilustran procesos o secuencias, pero no necesariamente eventos temporales. Los organizadores gráficos mejoran la memoria al facilitar la visualización y organización de la información.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Lectura de tablas y figuras. <br> Selecciona la opción que contiene las afirmaciones correctas. <br> Enunciados: <br> 1. El título de una tabla es innecesario para su interpretación. <br> 2. En un gráfico, los ejes horizontal y vertical representan variables. <br> 3. Los gráficos circulares se utilizan para comparar múltiples series de datos. <br> 4. Las notas al pie proporcionan información sobre la fuente de datos. <br> 5. La lectura interpretativa se limita a extraer datos explícitos. <br> 6. Identificar tendencias es parte de la lectura interpretativa.', options: ['1, 3, 5', '2, 4, 6', '1, 2, 3', '4, 5, 6'], answer: '2, 4, 6', explanation: 'En un gráfico, los ejes representan variables específicas (ejemplo: tiempo vs. cantidad). Las notas al pie aclaran detalles metodológicos, fuentes o símbolos. Identificar tendencias es una actividad interpretativa que implica analizar patrones. El título es esencial para comprender el propósito de una tabla o figura. Los gráficos circulares muestran proporciones de un todo, no múltiples series (para eso se usan gráficos de barras). La lectura interpretativa va más allá de los datos explícitos e incluye inferencias y relaciones contextuales.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Estrategias de lectura comprensiva. <br> Selecciona la opción que contiene las afirmaciones correctas. <br> Enunciados: <br> 1. Identificar el género textual ayuda a comprender la intención del autor. <br> 2. Los conocimientos previos no influyen en la comprensión lectora. <br> 3. La estructura de un texto argumentativo incluye tesis, argumentos y conclusión. <br> 4. Hacer inferencias significa leer información explícita. <br> 5. Utilizar organizadores gráficos favorece el análisis y síntesis. <br> 6. Formular preguntas de reflexión se realiza solo después de la lectura.', options: ['1, 2, 3', '2, 4, 6', '1, 3, 5', '4, 5, 6'], answer: '1, 3, 5', explanation: 'Identificar el género textual (narrativo, argumentativo, expositivo) permite entender la intención del autor y ajustar la estrategia de lectura. La estructura argumentativa se compone de tesis, argumentos y conclusión. Los organizadores gráficos facilitan el análisis y la síntesis al visualizar relaciones entre ideas. Los conocimientos previos son fundamentales para relacionar el texto con experiencias personales. Hacer inferencias implica leer "entre líneas" para extraer información implícita. Las preguntas de reflexión pueden formularse durante y después de la lectura para promover el pensamiento crítico.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ideas principales, secundarias y tipos de texto. <br> Relaciona cada elemento de la columna A con su correspondiente en la columna B. <br> <img src="https://i.ibb.co/ccBxVMCj/Captura-de-pantalla-2026-10-02-110716.png" alt="Descripción de la imagen" width="550" height="240">', options: ['1-a, 2-b, 3-c, 4-d, 5-e, 6-f', '1-b, 2-a, 3-d, 4-c, 5-f, 6-e', '1-a, 2-b, 3-d, 4-c, 5-e, 6-f', '1-b, 2-a, 3-c, 4-d, 5-f, 6-e'], answer: '1-a, 2-b, 3-c, 4-d, 5-e, 6-f', explanation: 'La idea principal (1) es el mensaje central (a). Las ideas secundarias (2) complementan con detalles (b). Los textos expositivos (3) informan y explican (c). Los textos argumentativos (4) persuaden (d). La idea principal explícita (5) se inicia directamente (e), mientras que la implícita (6) se deduce (f). Esta relación refleja la jerarquía y función de cada elemento en la comprensión lectora..', multi: 'OFF', maxSelect: 1 },
+            { question: 'Organizadores gráficos. <br> Relaciona cada elemento de la columna A con su correspondiente en la columna B. <br> <img src="https://i.ibb.co/qL3XzPXb/Captura-de-pantalla-2026-10-02-111225.png" alt="Descripción de la imagen" width="550" height="240">', options: ['1-a, 2-b, 3-c, 4-d, 5-e, 6-f', '1-b, 2-a, 3-c, 4-d, 5-f, 6-e', '1-a, 2-b, 3-d, 4-c, 5-e, 6-f', '1-c, 2-d, 3-a, 4-b, 5-f, 6-e'], answer: '1-a, 2-b, 3-c, 4-d, 5-e, 6-f', explanation: 'El diagrama de Venn (1) compara y contrasta (a). El mapa conceptual (2) muestra jerarquías (b). El diagrama de causa-efecto (3) identifica causas (c). La línea de tiempo (4) ordena eventos cronológicamente (d). La tabla comparativa (5) organiza características (e). El diagrama de flujo (6) ilustra procesos (f). Cada organizador tiene una función específica que optimiza la comprensión y el análisis de información.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Tipos de representaciones visuales. <br> Relaciona cada elemento de la columna A con su correspondiente en la columna B. <br> <img src="https://i.ibb.co/5Xm0DYr4/Captura-de-pantalla-2026-10-02-111613.png" alt="Descripción de la imagen" width="550" height="200">', options: ['1-b, 2-c, 3-d, 4-e, 5-f, 6-a', '1-c, 2-d, 3-e, 4-f, 5-a, 6-b', '1-d, 2-e, 3-f, 4-a, 5-b, 6-c', '1-a, 2-b, 3-c, 4-d, 5-e, 6-f'], answer: '1-a, 2-b, 3-c, 4-d, 5-e, 6-f', explanation: 'Las tablas (1) organizan datos en filas y columnas (a). Los gráficos de barras (2) comparan categorías (b). Los gráficos circulares (3) representan proporciones (c). Los diagramas de flujo (4) ilustran procesos (d). Los mapas conceptuales (5) organizan ideas jerárquicamente (e). Las líneas de tiempo (6) ordenan eventos cronológicamente (f). Estas herramientas visuales facilitan la interpretación de datos complejos.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Estrategias de lectura. <br> Relaciona cada elemento de la columna A con su correspondiente en la columna B. <br> <img src="https://i.ibb.co/h1fqsmsQ/Captura-de-pantalla-2026-10-02-112043.png" alt="Descripción de la imagen" width="550" height="200">', options: ['1-a, 2-b, 3-c, 4-d, 5-e, 6-f', '1-b, 2-c, 3-d, 4-e, 5-f, 6-a', '1-c, 2-d, 3-e, 4-f, 5-a, 6-b', '1-d, 2-e, 3-f, 4-a, 5-b, 6-c'], answer: '1-a, 2-b, 3-c, 4-d, 5-e, 6-f', explanation: 'Identificar el género textual (1) ayuda a comprender la intención del autor (a). Activar conocimientos previos (2) permite relacionar el texto con experiencias (b). Hacer inferencias (3) implica extraer información no explícita (c). Usar organizadores gráficos (4) visualiza y estructura la información (d). Leer tablas y figuras (5) interpreta datos visuales en contexto (e). Formular preguntas de reflexión (6) promueve el pensamiento crítico (f). Estas estrategias mejoran la comprensión lectora integral.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ideas principales y secundarias. <br> Indica la opción que contiene las afirmaciones verdaderas. <br> 1. La idea principal puede estar implícita en el texto. <br> 2. Las ideas secundarias son indispensables para el mensaje central. <br> 3. La idea principal articula y da coherencia a las demás oraciones. <br> 4. Las ideas secundarias siempre incluyen fechas y descripciones. <br> 5. Si se elimina una idea secundaria, el texto pierde su significado global. <br> 6. La idea principal no depende de otras ideas.', options: ['1, 2, 3', '1, 3, 6', '2, 4, 5', '4, 5, 6'], answer: '1, 3, 6', explanation: 'La idea principal puede estar implícita (1: V). La idea principal da coherencia al texto (3: V). La idea principal es autónoma y no depende de otras ideas (6: V). Las ideas secundarias no son indispensables (2: F), no siempre incluyen fechas o descripciones (4: F), y su eliminación no afecta el mensaje central (5: F). Estas características destacan la centralidad de la idea principal en la estructura textual.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Organizadores gráficos. <br> Indica la opción que contiene las afirmaciones verdaderas. <br> 1. Los diagramas de Venn son útiles para mostrar similitudes y diferencias. <br> 2. Los mapas conceptuales se utilizan para ordenar eventos cronológicamente. <br> 3. Los diagramas de causa-efecto ayudan a analizar relaciones de causalidad. <br> 4. Las líneas de tiempo permiten visualizar la secuencia de eventos. <br> 5. Las tablas comparativas son ideales para representar proporciones. <br> 6. Los organizadores gráficos no ayudan a la memoria.', options: ['1, 2, 3', '2, 4, 5', '1, 3, 4', '3, 5, 6'], answer: '1, 3, 4', explanation: 'Los diagramas de Venn comparan y contrastan elementos (1: V). Los diagramas de causa-efecto analizan causalidades (3: V). Las líneas de tiempo visualizan secuencias cronológicas (4: V). Los mapas conceptuales representan jerarquías, no cronología (2: F). Las tablas comparativas organizan datos, no proporciones (5: F). Los organizadores gráficos mejoran la memoria al estructurar información (6: F). Su uso adecuado potencia el aprendizaje..', multi: 'OFF', maxSelect: 1 },
+            { question: 'Lectura de tablas y figuras. <br> Indica la opción que contiene las afirmaciones verdaderas. <br> El título de una figura es opcional. <br> 1. Los gráficos de barras comparan valores entre categorías. <br> 2. Los gráficos circulares muestran tendencias con el tiempo. <br> 3. La lectura literal incluye leer el título y leyendas. <br> 4. La lectura interpretativa implica comparar datos y buscar tendencias. <br> 5. Las notas al pie solo se usan en textos académicos.', options: ['1, 2, 3', '3, 4, 6', '1, 5, 6', '2, 4, 5'], answer: '2, 4, 5', explanation: 'Los gráficos de barras comparan categorías (2: V). La lectura literal incluye título y leyendas (4: V). La lectura interpretativa busca tendencias y relaciones (5: V). El título es esencial para entender la figura (1: F). Los gráficos circulares muestran proporciones, no tendencias temporales (3: F). Las notas al pie se usan en diversos textos (6: F). Una lectura efectiva combina ambos niveles de análisis.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Estrategias de lectura. <br> Indica la opción que contiene las afirmaciones verdaderas. <br> 1. La lectura comprensiva se facilita identificando el género textual. <br> 2. Activando conocimientos previos se puede interferir con la comprensión. <br> 3. La estructura de un texto argumentativo incluye introducción, nudo y desenlace. <br> 4. Hacer inferencias es leer entre líneas. <br> 5. Los organizadores gráficos son versátiles y se usan en diversos contextos. <br> 6. Formular preguntas de reflexión solo es útil después de la lectura.', options: ['1, 2, 3', '2, 3, 6', '4, 5, 6', '1, 4, 5'], answer: '1, 4, 5', explanation: 'Identificar el género textual mejora la comprensión (1: V). Hacer inferencias implica leer información implícita (4: V). Los organizadores gráficos son versátiles (5: V). Los conocimientos previos enriquecen la comprensión, no la interfieren (2: F). La estructura argumentativa es tesis-argumentos-conclusión, no introducción-nudo-desenlace (3: F). Las preguntas de reflexión son útiles durante y después de la lectura (6: F). Estas estrategias son clave para una lectura crítica.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ideas principales y secundarias. <br> Selecciona la opción que contiene las resoluciones correctas. <br> 1. ¿Qué caracteriza a la idea principal? Es el mensaje central del texto. <br> 2. ¿Qué ocurre si se elimina la idea principal? El texto pierde sentido. <br> 3. ¿Las ideas secundarias son necesarias para el mensaje central? No, pueden suprimirse. <br> 4. ¿Dónde se encuentra usualmente la idea principal? Puede encontrarse al inicio o final del párrafo. <br> 5. ¿Las ideas secundarias dependen de la idea principal? Sí. <br> 6. ¿Puede la idea principal estar implícita? Sí.', options: ['1, 2, 3, 5, 6', '1, 3, 4, 5, 6', '2, 3, 4, 5, 6', 'Todas las anteriores'], answer: 'Todas las anteriores', explanation: 'La idea principal es el mensaje central (1). Su eliminación afecta la coherencia del texto (2). Las ideas secundarias son complementarias y prescindibles (3). La idea principal puede ubicarse al inicio, final o estar implícita (4). Las ideas secundarias dependen de la principal (5). La idea principal puede deducirse si no es explícita (6). Todas las respuestas reflejan las características esenciales de las ideas principales y secundarias.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Organizadores gráficos. <br> Selecciona la opción que contiene las resoluciones correctas. <br> 1. ¿Para qué sirve un diagrama de Venn? Para comparar y contrastar elementos. <br> 2. ¿Qué organizador se usa para representar jerarquías? Mapa conceptual. <br> 3. ¿El diagrama de Ishikawa es para? Identificar causas de un problema. <br> 4. ¿Las líneas de tiempo ordernan? Eventos cronológicamente. <br> 5. ¿Las tablas comparativas organizan? Datos en filas y columnas. <br> 6. ¿Los diagramas de flujo ilustran? Procesos o secuencias.', options: ['Todas las anteriores', '1, 2, 3, 4, 5', '2, 3, 4, 5, 6', '1, 3, 4, 5, 6'], answer: 'Todas las anteriores', explanation: 'El diagrama de Venn compara y contrasta (1). El mapa conceptual representa jerarquías (2). El diagrama de Ishikawa (causa-efecto) identifica causas (3). Las líneas de tiempo ordenan eventos cronológicamente (4). Las tablas organizan datos en filas y columnas (5). Los diagramas de flujo ilustran procesos (6). Cada organizador cumple una función específica que optimiza la comprensión y el análisis de información.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Lectura de tablas y figuras. <br> Selecciona la opción que contiene las resoluciones correctas. <br> 1. ¿Qué se debe leer primero en una tabla? El título. <br> 2. ¿Qué representan los ejes en un gráfico? Variables. <br> 3. ¿Para qué sirven las leyendas? Explicar símbolos y abreviaturas. <br> 4. ¿La lectura interpretativa incluye? Inferir causas y consecuencias. <br> 5. ¿Los gráficos circulares muestran? Proporciones de un todo. <br> 6. ¿Las notas al pie aclaran? Detalles metodológicos y fuentes.', options: ['1, 2, 3, 4, 5', 'Todas las anteriores', '2, 3, 4, 5, 6', '1, 3, 4, 5, 6'], answer: 'Todas las anteriores', explanation: 'El título es lo primero que se lee en una tabla o figura (1). Los ejes en un gráfico representan variables (2). Las leyendas explican símbolos y abreviaturas (3). La lectura interpretativa incluye inferir causas y consecuencias (4). Los gráficos circulares muestran proporciones (5). Las notas al pie aclaran detalles metodológicos y fuentes (6). Estas prácticas aseguran una interpretación precisa y contextualizada de los datos visuales.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Estrategias de lectura. <br> Selecciona la opción que contiene las resoluciones correctas. <br> 1. ¿Por qué es importante identificar el género textual? Para comprender la intención del autor. <br> 2. ¿Cómo ayudan los conocimientos previos? Relacionando el texto con experiencias. <br> 3. ¿Qué significa hacer inferencias? Extraer información no explícita. <br> 4. ¿Para qué se usan los organizadores gráficos? Visualizar y estructurar información. <br> 5. ¿Qué implica leer tablas y figuras? Lectura literal e interpretativa. <br> 6. ¿Cuándo se formulan preguntas de reflexión? Durante y después de la lectura.', options: ['1, 2, 3, 4, 5', '2, 3, 4, 5, 6', '1, 2, 3, 4, 5, 6', '1, 3, 4, 5, 6'], answer: '1, 2, 3, 4, 5, 6', explanation: 'Explicación16.', multi: 'OFF', maxSelect: 1 },
+        ];
+
+        let state = {
+            currentMode: 'deber',
+            view: 'quiz_home',
+            studentName: '',
+            studentEmail: '',
+            activeQuestions: [],
+            currentQuestion: 0,
+            score: 0,
+            selectedAnswer: null,
+            isAnswerCorrect: null,
+            emailStatus: null,
+            emailAnalysis: null,
+            emailAnalysisMsg: ''
+        };
+
+        const disposableDomains = [
+            'tempmail.com','temp-mail.org','guerrillamail.com','10minutemail.com','mailinator.com',
+            'yopmail.com','throwawaymail.com','fakeinbox.com','trashmail.com','getnada.com',
+            'maildrop.cc','dispostable.com','sharklasers.com','guerrillamailblock.com'
+        ];
+        const trustedProviders = [
+            'gmail.com','googlemail.com','hotmail.com','hotmail.es','hotmail.co.uk','outlook.com',
+            'outlook.es','live.com','msn.com','yahoo.com','yahoo.es','icloud.com','me.com',
+            'protonmail.com','proton.me','aol.com','zoho.com','gmx.com','mail.com'
+        ];
+
+        function isValidEmailFormat(email) {
+            const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+            return re.test(email) && email.length <= 254 && !email.includes('..') && !email.startsWith('.') && !email.endsWith('.');
+        }
+
+        function analyzeEmail(email) {
+            const lower = email.toLowerCase().trim();
+            if (!lower) {
+                return { valid: false, msg: 'Escribe un correo electrónico.' };
+            }
+            if (!isValidEmailFormat(lower)) {
+                return { valid: false, msg: 'Formato inválido. Revisa que tenga @ y un dominio correcto.' };
+            }
+            const domain = lower.split('@')[1];
+            if (!domain || domain.length < 3) {
+                return { valid: false, msg: 'Dominio incompleto o inválido.' };
+            }
+            if (disposableDomains.some(d => domain === d || domain.endsWith('.' + d))) {
+                return { valid: false, msg: 'Correo temporal / desechable detectado. Usa un correo real.' };
+            }
+            const isTrusted = trustedProviders.some(p => domain === p);
+            const hasGoodTld = /\.(com|es|net|org|edu|gov|mx|ar|co|uk|de|fr|it|pt|br|cl)$/i.test(domain);
+            if (!hasGoodTld && !isTrusted) {
+                return { valid: false, msg: 'Dominio poco común o sospechoso. Usa Gmail, Hotmail/Outlook, Yahoo, etc.' };
+            }
+            let analysisText = '';
+            if (domain.includes('hotmail') || domain.includes('outlook') || domain.includes('live.com') || domain.includes('msn.com')) {
+                analysisText = 'Análisis: proveedor Microsoft (Hotmail/Outlook) detectado · formato correcto · dominio legítimo';
+            } else if (domain.includes('gmail') || domain.includes('googlemail')) {
+                analysisText = 'Análisis: proveedor Google (Gmail) detectado · formato correcto · dominio legítimo';
+            } else if (isTrusted) {
+                analysisText = 'Análisis: proveedor conocido · formato correcto · dominio legítimo';
+            } else {
+                analysisText = 'Análisis: formato válido · dominio con TLD estándar · no se detectaron patrones de correo temporal';
+            }
+            return { valid: true, msg: analysisText };
+        }
+
+        function showSection(section, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const app = document.getElementById('app');
+            if (section === 'pdf') {
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">📄 Pizarra Virtual</h2><div class="iframe-container"><iframe src="${DRIVE_PDF_URL}" width="100%" height="100%"></iframe></div></div>`;
+            } else if (section === 'video') {
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">🎥 Video Clase</h2><div class="iframe-container"><iframe src="${DRIVE_VIDEO_URL}" width="100%" height="100%"></iframe></div></div>`;
+            }
+        }
+
+        function prepQuiz(mode, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            state = {
+                currentMode: mode,
+                view: 'quiz_home',
+                studentName: '',
+                studentEmail: '',
+                activeQuestions: [],
+                currentQuestion: 0,
+                score: 0,
+                selectedAnswer: null,
+                isAnswerCorrect: null,
+                emailStatus: null,
+                emailAnalysis: null,
+                emailAnalysisMsg: ''
+            };
+            render();
+        }
+
+        function startQuiz() {
+            if (state.currentMode === 'deber') {
+                state.activeQuestions = [...quizData];
+            } else if (state.currentMode === 'evaluacion') {
+                state.activeQuestions = [...quizData]
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 20);
+            } else if (state.currentMode === 'extra') {
+                state.activeQuestions = [...quizDataExtra];
+            }
+            state.view = 'name_input';
+            state.emailAnalysis = null;
+            state.emailAnalysisMsg = '';
+            render();
+        }
+
+        function onEmailInput() {
+            const e = document.getElementById('email-in');
+            if (!e) return;
+            const val = e.value.trim();
+            if (val.length < 5) {
+                state.emailAnalysis = null;
+                state.emailAnalysisMsg = '';
+                updateEmailUI();
+                return;
+            }
+            state.emailAnalysis = 'checking';
+            state.emailAnalysisMsg = 'Analizando correo…';
+            updateEmailUI();
+            clearTimeout(window._emailCheckTimer);
+            window._emailCheckTimer = setTimeout(() => {
+                const result = analyzeEmail(val);
+                state.emailAnalysis = result.valid ? 'valid' : 'invalid';
+                state.emailAnalysisMsg = result.msg;
+                updateEmailUI();
+            }, 600);
+        }
+
+        function updateEmailUI() {
+            const feedback = document.getElementById('email-feedback');
+            const analysis = document.getElementById('email-analysis');
+            const input = document.getElementById('email-in');
+            if (!feedback || !analysis || !input) return;
+            if (state.emailAnalysis === 'checking') {
+                feedback.innerHTML = `<span class="text-slate-500 text-sm flex items-center gap-2"><span class="dot-pulse">●</span> Verificando…</span>`;
+                analysis.innerHTML = `<p class="text-xs text-slate-400 mt-1">${state.emailAnalysisMsg}</p>`;
+                input.classList.remove('border-red-400', 'border-emerald-400');
+                input.classList.add('border-slate-300');
+            } else if (state.emailAnalysis === 'invalid') {
+                feedback.innerHTML = `<span class="text-red-600 text-sm font-semibold">✗ Correo no válido o inexistente</span>`;
+                analysis.innerHTML = `<p class="text-xs text-red-500/80 mt-1">${state.emailAnalysisMsg}</p>`;
+                input.classList.remove('border-emerald-400', 'border-slate-300');
+                input.classList.add('border-red-400');
+            } else if (state.emailAnalysis === 'valid') {
+                feedback.innerHTML = `<span class="text-emerald-600 text-sm font-semibold">✓ Correo aceptado</span>`;
+                analysis.innerHTML = `<p class="text-xs text-emerald-600/80 mt-1">${state.emailAnalysisMsg}</p>`;
+                input.classList.remove('border-red-400', 'border-slate-300');
+                input.classList.add('border-emerald-400');
+            } else {
+                feedback.innerHTML = '';
+                analysis.innerHTML = '';
+                input.classList.remove('border-red-400', 'border-emerald-400');
+                input.classList.add('border-slate-300');
+            }
+        }
+
+        function validaDatos() {
+            const n = document.getElementById('name-in').value.trim();
+            const e = document.getElementById('email-in').value.trim();
+            if (n.length <= 2) {
+                alert("Ingresa nombre completo (mínimo 3 caracteres).");
+                return;
+            }
+            const result = analyzeEmail(e);
+            state.emailAnalysis = result.valid ? 'valid' : 'invalid';
+            state.emailAnalysisMsg = result.msg;
+            updateEmailUI();
+            if (!result.valid) return;
+            state.studentName = n;
+            state.studentEmail = e;
+            state.view = 'playing';
+            render();
+        }
+
+        // ---------- LÓGICA DE RESPUESTAS (single + multi) ----------
+        function isMultiQuestion(q) {
+            return q.multi === 'ON';
+        }
+
+        function arraysEqual(a, b) {
+            if (!Array.isArray(a) || !Array.isArray(b)) return false;
+            if (a.length !== b.length) return false;
+            const sa = [...a].sort();
+            const sb = [...b].sort();
+            return sa.every((v, i) => v === sb[i]);
+        }
+
+        function handleAnswer(option) {
+            // Ya se comprobó la respuesta → no permitir más cambios
+            if (state.isAnswerCorrect !== null) return;
+
+            const currentQ = state.activeQuestions[state.currentQuestion];
+
+            if (isMultiQuestion(currentQ)) {
+                // Selección múltiple: toggle
+                let selected = Array.isArray(state.selectedAnswer) ? [...state.selectedAnswer] : [];
+                const idx = selected.indexOf(option);
+
+                if (idx > -1) {
+                    selected.splice(idx, 1); // deseleccionar
+                } else {
+                    if (selected.length >= currentQ.maxSelect) return; // límite alcanzado
+                    selected.push(option);
+                }
+                state.selectedAnswer = selected;
+                render();
+            } else {
+                // Selección simple (incluye preguntas V/F)
+                if (state.selectedAnswer !== null) return;
+                state.selectedAnswer = option;
+                state.isAnswerCorrect = (option === currentQ.answer);
+                if (state.isAnswerCorrect) state.score++;
+                render();
+                if (state.isAnswerCorrect) {
+                    setTimeout(() => nextQuestion(), 1000);
+                }
+            }
+        }
+
+        function checkMultiAnswer() {
+            if (state.isAnswerCorrect !== null) return;
+
+            const currentQ = state.activeQuestions[state.currentQuestion];
+            if (!isMultiQuestion(currentQ)) return;
+
+            const selected = Array.isArray(state.selectedAnswer) ? state.selectedAnswer : [];
+            if (selected.length === 0) return;
+
+            // Comparación exacta (mismo conjunto de respuestas)
+            const correctAnswers = Array.isArray(currentQ.answer) ? currentQ.answer : [currentQ.answer];
+            state.isAnswerCorrect = arraysEqual(selected, correctAnswers);
+
+            if (state.isAnswerCorrect) state.score++;
+            render();
+
+            if (state.isAnswerCorrect) {
+                setTimeout(() => nextQuestion(), 1000);
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentQuestion + 1 < state.activeQuestions.length) {
+                state.currentQuestion++;
+                state.selectedAnswer = null;
+                state.isAnswerCorrect = null;
+                render();
+            } else {
+                state.view = 'results';
+                render();
+                enviarCorreo();
+            }
+        }
+
+        function enviarCorreo() {
+            if (!state.studentEmail) return;
+            state.emailStatus = 'sending';
+            render();
+            const scorePerc = Math.round((state.score / state.activeQuestions.length) * 100);
+            const totalQ = state.activeQuestions.length;
+            let imageUrl = '';
+            let mensaje = '';
+            if (scorePerc >= 90) {
+                imageUrl = 'https://img.icons8.com/color/128/medal2.png';
+                mensaje = `¡Excelente trabajo, ${state.studentName}! Obtuviste un resultado sobresaliente.`;
+            } else if (scorePerc >= 70) {
+                imageUrl = 'https://img.icons8.com/color/128/diploma.png';
+                mensaje = `¡Muy bien, ${state.studentName}! Has aprobado con un buen resultado.`;
+            } else if (scorePerc >= 50) {
+                imageUrl = 'https://img.icons8.com/color/128/ok.png';
+                mensaje = `Buen esfuerzo, ${state.studentName}. Sigue practicando para mejorar.`;
+            } else {
+                imageUrl = 'https://img.icons8.com/color/128/error.png';
+                mensaje = `Ánimo, ${state.studentName}. Revisa el material y vuelve a intentarlo.`;
+            }
+            const params = {
+                to_name: state.studentName,
+                to_email: state.studentEmail,
+                score: scorePerc,
+                correct_answers: state.score,
+                total_questions: totalQ,
+                mode_name: state.currentMode.toUpperCase(),
+                image_url: imageUrl,
+                mensaje: mensaje,
+                fecha: new Date().toLocaleDateString('es-ES', { 
+                    year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                })
+            };
+            emailjs.send("service_dhvsi72", "template_cy74x9h", params)
+                .then(() => { 
+                    state.emailStatus = 'success'; 
+                    render(); 
+                })
+                .catch((err) => { 
+                    console.error('Error EmailJS:', err);
+                    state.emailStatus = 'error'; 
+                    render(); 
+                });
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            
+            let modeTitle = '';
+            let modeDesc = '';
+            if (state.currentMode === 'deber') {
+                modeTitle = '📚 Practica';
+                modeDesc = 'Resuelve las 50 preguntas del banco en orden.';
+            } else if (state.currentMode === 'evaluacion') {
+                modeTitle = '📝 Repaso';
+                modeDesc = 'Prueba de 20 preguntas seleccionadas al azar.';
+            } else if (state.currentMode === 'extra') {
+                modeTitle = '📊 Evaluación';
+                modeDesc = 'Resuelve las 16 preguntas de la Evaluación.';
+            }
+            
+            if (state.view === 'quiz_home') {
+                app.innerHTML = `
+                <div class="text-center py-16 animate-fade-in bg-white rounded-[3rem] shadow-xl border">
+                    <h2 class="text-4xl font-black text-slate-800 mb-2">${modeTitle}</h2>
+                    <p class="text-slate-500 mb-8 text-lg">${modeDesc}</p>
+                    <button onclick="startQuiz()" class="bg-emerald-600 text-white px-12 py-5 rounded-2xl font-black text-xl hover:bg-emerald-700 transition-all">
+                        INICIAR
+                    </button>
+                </div>`;
+            }
+
+            if (state.view === 'name_input') {
+                app.innerHTML = `
+                <div class="max-w-md mx-auto bg-white p-10 rounded-[2.5rem] shadow-2xl animate-fade-in">
+                    <h2 class="text-2xl font-black mb-6 text-center">Registro de Estudiante</h2>
+                    <input id="name-in" type="text" placeholder="Nombre y Apellido completo" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl mb-4 focus:border-emerald-500 outline-none">
+                    
+                    <div class="relative mb-1">
+                        <input id="email-in" type="email" placeholder="Correo para recibir nota (Gmail, Hotmail…)" 
+                               class="w-full p-4 bg-slate-50 border border-slate-300 rounded-xl focus:border-emerald-500 outline-none transition-colors"
+                               oninput="onEmailInput()" onblur="onEmailInput()">
+                    </div>
+                    
+                    <div id="email-feedback" class="min-h-[22px] mb-1"></div>
+                    <div id="email-analysis" class="mb-5"></div>
+                    
+                    <button onclick="validaDatos()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all">
+                        ENTRAR AL TEST
+                    </button>
+                    <p class="text-center text-[11px] text-slate-400 mt-4">Se verifica formato y se descartan correos temporales. No se envía nada hasta terminar el test.</p>
+                </div>`;
+                setTimeout(updateEmailUI, 50);
+            }
+
+            if (state.view === 'playing') {
+                const q = state.activeQuestions[state.currentQuestion];
+                const progress = ((state.currentQuestion + 1) / state.activeQuestions.length) * 100;
+                const multi = isMultiQuestion(q);
+                const selected = multi
+                    ? (Array.isArray(state.selectedAnswer) ? state.selectedAnswer : [])
+                    : (state.selectedAnswer ? [state.selectedAnswer] : []);
+
+                // Indicador de selección múltiple (CORREGIDO)
+                const multiHint = multi
+                    ? `<p class="text-sm text-sky-600 font-semibold mb-4">
+                         Selección múltiple · elige q.maxSelectrespuesta{q.maxSelect > 1 ? 's' : ''}
+                         ${selected.length > 0 ? `(${selected.length}/${q.maxSelect})` : ''}
+                       </p>`
+                    : '';
+
+                app.innerHTML = `
+                <div class="animate-fade-in">
+                    <div class="flex justify-between items-center mb-6 px-4">
+                        <span class="font-black text-emerald-600">${state.currentQuestion + 1} / ${state.activeQuestions.length}</span>
+                        <div class="w-48 bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full transition-all" style="width:${progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-2 leading-tight">${q.question}</h2>
+                        ${multiHint}
+                        <div class="grid gap-3">
+                            ${q.options.map(opt => {
+                                let style = "border-slate-100 bg-slate-50 hover:border-emerald-200";
+                                const isSelected = selected.includes(opt);
+
+                                if (state.isAnswerCorrect !== null) {
+                                    // Ya se comprobó → mostrar feedback final
+                                    if (multi) {
+                                        const correctSet = Array.isArray(q.answer) ? q.answer : [q.answer];
+                                        if (correctSet.includes(opt) && isSelected) {
+                                            style = "border-emerald-500 bg-emerald-100 text-emerald-800";
+                                        } else if (isSelected && !correctSet.includes(opt)) {
+                                            style = "border-red-500 bg-red-100 text-red-800";
+                                        } else if (correctSet.includes(opt) && !isSelected) {
+                                            style = "border-emerald-300 bg-emerald-50 text-emerald-700";
+                                        }
+                                    } else {
+                                        // Selección simple (incluye V/F) - muestra la correcta en verde
+                                        if (opt === q.answer) {
+                                            style = "border-emerald-500 bg-emerald-100 text-emerald-800";
+                                        } else if (isSelected) {
+                                            style = "border-red-500 bg-red-100 text-red-800";
+                                        }
+                                    }
+                                } else if (isSelected) {
+                                    // Selección en curso
+                                    if (multi) {
+                                        style = "border-sky-400 bg-sky-100 text-sky-800";
+                                    } else {
+                                        style = "border-emerald-500 bg-emerald-100 text-emerald-800";
+                                    }
+                                }
+
+                                // Escapar comillas y barras para el atributo onclick
+                                const safeOpt = opt.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+                                return `<button onclick="handleAnswer('${safeOpt}')" 
+                                            class="p-5 text-left border-2 rounded-xl font-bold transition-all ${style}">
+                                            ${opt}
+                                        </button>`;
+                            }).join('')}
+                        </div>
+
+                        ${/* Botón comprobar (solo multi y aún no comprobado) - CORREGIDO */
+                          multi && state.isAnswerCorrect === null ? `
+                            <button onclick="checkMultiAnswer()" 
+                                class="mt-6 w-full py-4 rounded-xl font-bold transition-all
+                                ${selected.length === q.maxSelect 
+                                    ? 'bg-sky-600 text-white hover:bg-sky-700' 
+                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'}"
+                                ${selected.length !== q.maxSelect ? 'disabled' : ''}>
+                                Comprobar respuesta (selected.length/{q.maxSelect})
+                            </button>
+                          ` : ''}
+
+                        ${/* Explicación + siguiente (cuando falló) */
+                          state.selectedAnswer !== null && state.isAnswerCorrect === false ? `
+                            <div class="mt-6 p-5 bg-amber-50 border border-amber-200 rounded-xl">
+                                <p class="font-bold text-amber-800 mb-2">Explicación:</p>
+                                <p class="text-slate-700">${q.explanation}</p>
+                            </div>
+                            <button onclick="nextQuestion()" class="mt-6 w-full bg-emerald-600 text-white py-4 rounded-xl font-bold hover:bg-emerald-700 transition-all">
+                                Siguiente pregunta
+                            </button>
+                          ` : ''}
+                    </div>
+                </div>`;
+            }
+
+            if (state.view === 'results') {
+                const scorePerc = Math.round((state.score / state.activeQuestions.length) * 100);
+                app.innerHTML = `
+                <div class="max-w-md mx-auto text-center animate-fade-in bg-white p-12 rounded-[3rem] shadow-2xl">
+                    <h2 class="text-2xl font-black mb-2">${state.studentName}</h2>
+                    <p class="text-slate-400 uppercase text-xs font-bold mb-6">${state.currentMode}</p>
+                    <div class="text-7xl font-black text-emerald-600 mb-4">${scorePerc}%</div>
+                    <p class="text-lg font-bold text-slate-700 mb-10">${state.score} / ${state.activeQuestions.length} correctas</p>
+                    <button onclick="location.reload()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold">VOLVER AL INICIO</button> 
+                    <p class="mt-6 text-xs font-bold text-slate-400"> 
+                        ${state.emailStatus === 'success' ? '✅ Nota e imagen enviadas al correo' : 
+                          state.emailStatus === 'error' ? '⚠️ Error al enviar nota e imagen' : 
+                          '⏳ Enviando nota e imagen al correo...'}
+                    </p>
+                </div>`;
+            }
+        }
+        render();
+    </script>
+</body>
+</html>
