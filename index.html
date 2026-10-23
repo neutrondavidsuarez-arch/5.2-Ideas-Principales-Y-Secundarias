@@ -20,6 +20,7 @@
         .nav-btn.active { border-color: #10b981; color: #10b981; }
         @keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
         .dot-pulse { animation: pulse-dot 1.2s infinite; }
+        .question-img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 0.5rem 0; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans min-h-screen">
@@ -62,10 +63,10 @@
             { question: 'Ideas principales <br> Complete la analogía: <br> Idea principal es a esencia como idea secundaria es a ________.', options: ['fundamental', 'complemento', 'eliminable', 'central'], answer: 'complemento', explanation: 'B) complemento <br> La idea principal es la esencia del texto; la secundaria es su complemento (detalles, ejemplos, etc.).', multi: 'OFF', maxSelect: 1 },
             { question: 'Características de las ideas principales <br> ¿Cuál NO es una característica de la idea principal?', options: ['Expresa el punto central del tema.', 'No depende de otras ideas.', 'Incluye detalles y ejemplos.', 'Si se elimina, el texto pierde sentido.'], answer: 'Incluye detalles y ejemplos.', explanation: 'C) Incluye detalles y ejemplos. <br> Las características de la idea principal son: expresa el punto central, no depende de otras ideas y, si se elimina, el texto pierde sentido. Los detalles y ejemplos son propios de las ideas secundarias.', multi: 'OFF', maxSelect: 1 },
             { question: 'Organizadores gráficos <br> Complete el texto: <br> "Los organizadores gráficos son herramientas ________ que permiten ________ la información y visualizar ________ entre conceptos."', options: ['auditivas – memorizar – diferencias', 'visuales – estructurar – relaciones', 'textuales – copiar – jerarquías', 'digitales – eliminar – conexiones'], answer: 'visuales – estructurar – relaciones', explanation: 'B) visuales – estructurar – relaciones <br> Los organizadores gráficos son herramientas visuales que permiten estructurar la información y visualizar relaciones entre conceptos.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Relacione cada organizador gráfico con su función principal: <br> Organizador <br> <br> 1. Diagrama de Venn <br> 2. Línea de tiempo <br> 3. Mapa conceptual <br> 4. Diagrama de causa-efecto <br> <br> Función <br> a) Ordenar eventos cronológicamente <br> b) Mostrar similitudes y diferencias <br> c) Identificar causas de un problema <br> d) Jerarquizar conceptos', options: ['1b 2a 3d 4c', '1a 2b 3c 4d', '1d 2c 3b 4a', '1c 2d 3a 4b'], answer: '1b 2a 3d 4c', explanation: 'A) 1b – 2a – 3d – 4c <br> 1. Diagrama de Venn &rarr; mostrar similitudes y diferencias. <br> 2. Línea de tiempo &rarr; ordenar eventos cronológicamente. <br> 3. Mapa conceptual &rarr; jerarquizar conceptos. <br> 4. Diagrama de causa-efecto &rarr; identificar causas de un problema.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Ordene los pasos para interpretar una tabla: <br> 1) Identificar ejes y variables <br> 2) Leer el título <br> 3) Comparar datos y buscar tendencias <br> 4) Revisar leyendas y notas', options: ['2-1-4-3', '1-2-3-4', '4-3-2-1', '2-4-1-3'], answer: '2-4-1-3', explanation: 'A) 2-1-4-3 <br> Orden lógico: leer el título &rarr; identificar ejes y variables &rarr; revisar leyendas y notas &rarr; comparar datos y buscar tendencias.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Relacione cada organizador gráfico con su función principal: <br> Organizador <br> <br> 1. Diagrama de Venn <br> 2. Línea de tiempo <br> 3. Mapa conceptual <br> 4. Diagrama de causa-efecto <br> <br> Función <br> a) Ordenar eventos cronológicamente <br> b) Mostrar similitudes y diferencias <br> c) Identificar causas de un problema <br> d) Jerarquizar conceptos', options: ['1b 2a 3d 4c', '1a 2b 3c 4d', '1d 2c 3b 4a', '1c 2d 3a 4b'], answer: '1b 2a 3d 4c', explanation: 'A) 1b – 2a – 3d – 4c <br> 1. Diagrama de Venn → mostrar similitudes y diferencias. <br> 2. Línea de tiempo → ordenar eventos cronológicamente. <br> 3. Mapa conceptual → jerarquizar conceptos. <br> 4. Diagrama de causa-efecto → identificar causas de un problema.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene los pasos para interpretar una tabla: <br> 1) Identificar ejes y variables <br> 2) Leer el título <br> 3) Comparar datos y buscar tendencias <br> 4) Revisar leyendas y notas', options: ['2-1-4-3', '1-2-3-4', '4-3-2-1', '2-4-1-3'], answer: '2-4-1-3', explanation: 'D) 2-4-1-3 <br> Orden lógico: leer el título → revisar leyendas y notas → identificar ejes y variables → comparar datos y buscar tendencias.', multi: 'OFF', maxSelect: 1 },
             { question: 'Texto: <br> “La Revolución Industrial no solo transformó la economía, sino también la estructura social. Surgieron nuevas clases, como el proletariado, y se aceleró el crecimiento urbano.” <br> ¿Cuál es la idea principal?', options: ['Surgió el proletariado.', 'Crecimiento urbano acelerado.', 'Transformación económica y social por la Revolución Industrial.', 'La economía cambió.'], answer: 'Transformación económica y social por la Revolución Industrial.', explanation: 'C) Transformación económica y social por la Revolución Industrial. <br> Es la idea que resume el párrafo completo. A y B son detalles secundarios; D es incompleta.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Texto: “El uracilo hallado en el asteroide Ryugu sugiere que compuestos extraterrestres influyeron en el origen de la vida en la Tierra.” <br> ¿Qué idea secundaria se menciona?', options: ['El uracilo es un componente del ARN.', 'La sonda tomó muestras del asteroide.', 'Los asteroides contienen aminoácidos.', 'El origen de la vida es exclusivo de la Tierra.'], answer: 'El uracilo es un componente del ARN.', explanation: 'A) El uracilo es un componente del ARN. <br> El texto menciona el hallazgo de uracilo y su posible influencia en el origen de la vida. La opción A es la idea secundaria más coherente con el contexto científico (aunque el texto no lo dice explícitamente, es el detalle que complementa). Las demás no aparecen o son incorrectas.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Texto: “El uracilo hallado en el asteroide Ryugu sugiere que compuestos extraterrestres influyeron en el origen de la vida en la Tierra.” <br> ¿Qué idea secundaria se menciona?', options: ['El uracilo es un componente del ARN.', 'La sonda tomó muestras del asteroide.', 'Los asteroides contienen aminoácidos.', 'El origen de la vida es exclusivo de la Tierra.'], answer: 'El uracilo es un componente del ARN.', explanation: 'A) El uracilo es un componente del ARN. <br> El texto menciona el hallazgo de uracilo y su posible influencia en el origen de la vida. La opción A es la idea secundaria más coherente con el contexto científico. Las demás no aparecen o son incorrectas.', multi: 'OFF', maxSelect: 1 },
             { question: '¿Cuál es el organizador gráfico más adecuado para comparar dos teorías sociológicas?', options: ['Línea de tiempo', 'Diagrama de Venn', 'Mapa mental', 'Gráfico de barras'], answer: 'Diagrama de Venn', explanation: 'B) Diagrama de Venn <br> Es el más adecuado para comparar similitudes y diferencias entre dos teorías.', multi: 'OFF', maxSelect: 1 },
             { question: 'Seleccione dos características de las ideas principales: <br> 1) Son eliminables sin afectar el sentido global. <br> 2) Expresan el mensaje central. <br> 3) Dependen de las ideas secundarias. <br> 4) Articulan y dan coherencia al texto.', options: ['1 y 2', '2 y 3', '3 y 4', '2 y 4'], answer: '2 y 4', explanation: 'D) 2 y 4 <br> Características de las ideas principales: expresan el mensaje central y articulan/dan coherencia al texto. No son eliminables ni dependen de las secundarias.', multi: 'OFF', maxSelect: 1 },
             { question: 'Seleccione tres estrategias para identificar ideas principales: <br> 1) Preguntarse: “¿De qué trata el texto?” <br> 2) Buscar oraciones temáticas al inicio o final. <br> 3) Subrayar todos los adjetivos. <br> 4) Eliminar todas las ideas secundarias. <br> 5) Usar la abstracción para reducir el texto a su esencia. <br> 6) Contar el número de párrafos.', options: ['1, 2, 5', '2, 3, 6', '3, 4, 5', '1, 4, 6'], answer: '1, 2, 5', explanation: 'A) 1, 2, 5 <br> Estrategias válidas: preguntarse de qué trata el texto, buscar oraciones temáticas y usar la abstracción. Subrayar adjetivos o contar párrafos no son estrategias útiles.', multi: 'OFF', maxSelect: 1 },
@@ -73,15 +74,15 @@
             { question: 'Ordene las palabras para formar la definición correcta: <br> "central – es – del – idea – texto – la – principal"', options: ['La idea principal es central del texto.', 'La idea central es principal del texto.', 'La idea principal del texto es central.', 'La idea del texto principal es central.'], answer: 'La idea principal es central del texto.', explanation: 'A) La idea principal es central del texto. <br> Es la ordenación correcta y con sentido.', multi: 'OFF', maxSelect: 1 },
             { question: 'Si un gráfico circular muestra: 60% Agricultura, 25% Industria, 15% Servicios, ¿qué inferencia es válida?', options: ['La industria es el sector predominante.', 'El sector servicios es el mayor.', 'La agricultura es la actividad principal.', 'No hay sector industrial.'], answer: 'La agricultura es la actividad principal.', explanation: 'C) La agricultura es la actividad principal. <br> 60 % es claramente el porcentaje más alto.', multi: 'OFF', maxSelect: 1 },
             { question: 'Indique si los siguientes enunciados son Verdaderos (V) o Falsos (F): <br> 1) Los mapas conceptuales sirven para ordenar eventos en el tiempo. <br> 2) Las líneas de tiempo muestran relaciones jerárquicas. <br> 3) Los diagramas de Venn son útiles para comparar. <br> 4) Las tablas comparativas organizan datos en filas y columnas.', options: ['F-F-V-V', 'V-V-F-F', 'F-V-F-V', 'V-F-V-F'], answer: 'F-F-V-V', explanation: 'A) F-F-V-V <br> F – Los mapas conceptuales no ordenan eventos en el tiempo. <br> F – Las líneas de tiempo no muestran jerarquías. <br> V – Los diagramas de Venn sirven para comparar. <br> V – Las tablas organizan datos en filas y columnas.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Complete la analogía: <br> Texto narrativo es a entretener como texto argumentativo es a ________.', options: ['informar', 'persuadir', 'describir', 'enumerar'], answer: 'persuadir', explanation: 'B) persuadir <br> Texto narrativo &rarr; entretener; texto argumentativo &rarr; persuadir.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Complete la analogía: <br> Texto narrativo es a entretener como texto argumentativo es a ________.', options: ['informar', 'persuadir', 'describir', 'enumerar'], answer: 'persuadir', explanation: 'B) persuadir <br> Texto narrativo → entretener; texto argumentativo → persuadir.', multi: 'OFF', maxSelect: 1 },
             { question: '¿Cuál NO es una estrategia de lectura comprensiva?', options: ['Identificar el género textual', 'Subrayar ideas principales', 'Ignorar títulos y subtítulos', 'Formular preguntas de reflexión'], answer: 'Ignorar títulos y subtítulos', explanation: 'C) Ignorar títulos y subtítulos <br> Eso no es una estrategia de lectura comprensiva; al contrario, deben atenderse.', multi: 'OFF', maxSelect: 1 },
             { question: 'Complete: <br> "Las ideas secundarias ________ la idea principal con ________, ejemplos o datos ________."', options: ['contradicen – opiniones – centrales', 'complementan – detalles – accesorios', 'eliminan – resúmenes – esenciales', 'sustituyen – gráficos – principales'], answer: 'complementan – detalles – accesorios', explanation: 'B) complementan – detalles – accesorios <br> Las ideas secundarias complementan la principal con detalles, ejemplos o datos accesorios.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Relacione cada género textual con su estructura típica: <br> <br> Género <br> 1) Narrativo <br> 2) Argumentativo <br> 3) Expositivo <br> <br> Estructura <br> a) Tesis - argumentos – conclusión <br> b) Introducción - nudo – desenlace <br> c) Idea principal - detalles - ejemplos - conclusión', options: ['1b - 2a - 3c', '1a - 2c - 3b', '1c - 2b - 3a', '1b - 2c - 3a'], answer: '1b - 2a - 3c', explanation: 'A) 1b – 2a – 3c <br> Narrativo &rarr;  introducción-nudo-desenlace. <br> Argumentativo &rarr;  tesis-argumentos-conclusión. <br> Expositivo &rarr; idea principal-detalles-ejemplos-conclusión.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Ordene los pasos para interpretar una tabla: <br> 1) Identificar variables <br> 2) Leer título <br> 3) Inferir tendencias <br> 4) Revisar notas al pie', options: ['2-1-4-3', '1-2-3-4', '4-3-2-1', '2-4-1-3'], answer: '2-1-4-3', explanation: 'A) 2-1-4-3 <br> Mismo orden lógico que el ejercicio 06: título &rarr; variables &rarr; notas &rarr; inferir tendencias.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Relacione cada género textual con su estructura típica: <br> <br> Género <br> 1) Narrativo <br> 2) Argumentativo <br> 3) Expositivo <br> <br> Estructura <br> a) Tesis - argumentos – conclusión <br> b) Introducción - nudo – desenlace <br> c) Idea principal - detalles - ejemplos - conclusión', options: ['1b - 2a - 3c', '1a - 2c - 3b', '1c - 2b - 3a', '1b - 2c - 3a'], answer: '1b - 2a - 3c', explanation: 'A) 1b – 2a – 3c <br> Narrativo → introducción-nudo-desenlace. <br> Argumentativo → tesis-argumentos-conclusión. <br> Expositivo → idea principal-detalles-ejemplos-conclusión.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Ordene los pasos para interpretar una tabla: <br> 1) Identificar variables <br> 2) Leer título <br> 3) Inferir tendencias <br> 4) Revisar notas al pie', options: ['2-1-4-3', '1-2-3-4', '4-3-2-1', '2-4-1-3'], answer: '2-1-4-3', explanation: 'A) 2-1-4-3 <br> Orden lógico: título → variables → notas → inferir tendencias.', multi: 'OFF', maxSelect: 1 },
             { question: 'Texto: “La globalización ha facilitado el intercambio cultural y económico, pero también ha generado desigualdades entre países desarrollados y en vías de desarrollo.” <br> ¿Cuál es la idea principal?', options: ['Intercambio cultural', 'Desigualdades entre países', 'Globalización con efectos positivos y negativos', 'Países en vías de desarrollo'], answer: 'Globalización con efectos positivos y negativos', explanation: 'C) Globalización con efectos positivos y negativos <br> Resume tanto el intercambio positivo como las desigualdades.', multi: 'OFF', maxSelect: 1 },
             { question: 'Texto: “Un gráfico de barras muestra el porcentaje de población con acceso a internet: Europa 85%, Asia 45%, África 22%.” <br> ¿Qué se puede inferir?', options: ['Europa tiene la menor conectividad.', 'África tiene la mayor brecha digital.', 'Asia tiene igual acceso que Europa.', 'No hay diferencias significativas.'], answer: 'África tiene la mayor brecha digital.', explanation: 'B) África tiene la mayor brecha digital. <br> 22 % es el porcentaje más bajo, por lo que presenta la mayor brecha.', multi: 'OFF', maxSelect: 1 },
             { question: '¿Cuál organizador gráfico es más adecuado para mostrar la evolución de la democracia en un país?', options: ['Diagrama de Venn', 'Línea de tiempo', 'Mapa conceptual', 'Diagrama de causa-efecto'], answer: 'Línea de tiempo', explanation: 'B) Línea de tiempo <br> Es el organizador ideal para mostrar evolución a lo largo del tiempo.', multi: 'OFF', maxSelect: 1 },
-            { question: 'Seleccione dos beneficios de los organizadores gráficos: <br> 1) Saturan con detalles innecesarios <br> 2) Favorecen la memoria visual <br> 3) Dificultan el análisis <br> 4) Mejoran la comprensión', options: ['1 y 2', '2 y 3', '3 y 4', '2 y 4'], answer: '2 y 4', explanation: 'D) 2 y 4 <br>Beneficios: favorecen la memoria visual y mejoran la comprensión.', multi: 'OFF', maxSelect: 1 },
+            { question: 'Seleccione dos beneficios de los organizadores gráficos: <br> 1) Saturan con detalles innecesarios <br> 2) Favorecen la memoria visual <br> 3) Dificultan el análisis <br> 4) Mejoran la comprensión', options: ['1 y 2', '2 y 3', '3 y 4', '2 y 4'], answer: '2 y 4', explanation: 'D) 2 y 4 <br> Beneficios: favorecen la memoria visual y mejoran la comprensión.', multi: 'OFF', maxSelect: 1 },
             { question: 'Seleccione tres estrategias para una lectura comprensiva: <br> 1) Identificar género textual <br> 2) Ignorar el título <br> 3) Activar conocimientos previos <br> 4) Hacer inferencias <br> 5) Evitar preguntas <br> 6) Subrayar ideas principales', options: ['1, 3, 4', '2, 4, 6', '3, 5, 6', '1, 2, 5'], answer: '1, 3, 4', explanation: 'A) 1, 3, 4 <br> Estrategias correctas: identificar género, activar conocimientos previos y hacer inferencias. Las demás son incorrectas o contraproducentes.', multi: 'OFF', maxSelect: 1 },
             { question: 'Causa: Un texto incluye muchas ideas secundarias. <br> Efecto: …', options: ['El texto se vuelve confuso y pierde enfoque.', 'La idea principal se fortalece automáticamente.', 'El texto se hace más corto.', 'Las ideas principales se eliminan.'], answer: 'El texto se vuelve confuso y pierde enfoque.', explanation: 'A) El texto se vuelve confuso y pierde enfoque. <br> Exceso de ideas secundarias puede diluir el mensaje central.', multi: 'OFF', maxSelect: 1 },
             { question: 'Ordene: <br> "visuales – organizadores – gráficos – herramientas – son"', options: ['Los organizadores gráficos son herramientas visuales.', 'Herramientas visuales son organizadores gráficos.', 'Organizadores son herramientas gráficas visuales.', 'Gráficos visuales son herramientas organizadoras.'], answer: 'Los organizadores gráficos son herramientas visuales.', explanation: 'A) Los organizadores gráficos son herramientas visuales. <br> Ordenación correcta y con sentido.', multi: 'OFF', maxSelect: 1 },
@@ -130,6 +131,18 @@
             { question: 'Orden lógico para analizar un texto: <br> 1. Identificar idea principal <br> 2. Leer título <br> 3. Localizar ideas secundarias <br> 4. Elaborar resumen o organizador', options: ['2-1-3-4', '1-2-3-4', '2-3-1-4', '4-2-1-3'], answer: '2-1-3-4', explanation: 'Título → idea principal → secundarias → síntesis.', multi: 'OFF', maxSelect: 1 },
         ];
 
+        // ========== CONFIGURACIÓN DEL TEMPORIZADOR DE EVALUACIÓN ==========
+        // Tiempo total: 16 minutos = 960 segundos (igual que Tema 1)
+        const EVAL_TIMER_SECONDS = 960;
+
+        // Tres fases de color según el tiempo RESTANTE (en segundos).
+        const EVAL_TIMER_PHASES = [
+            { minSeconds: 480, colorClass: 'text-emerald-600 bg-emerald-50 border-emerald-300' }, // ≥ 8 min → verde
+            { minSeconds: 60,  colorClass: 'text-amber-600 bg-amber-50 border-amber-300' },     // ≥ 1 min  → ámbar
+            { minSeconds: 0,   colorClass: 'text-red-600 bg-red-50 border-red-300' }            // < 1 min  → rojo
+        ];
+        // ==================================================================
+
         let state = {
             currentMode: 'deber',
             view: 'quiz_home',
@@ -142,8 +155,11 @@
             isAnswerCorrect: null,
             emailStatus: null,
             emailAnalysis: null,
-            emailAnalysisMsg: ''
+            emailAnalysisMsg: '',
+            timeLeft: 0
         };
+
+        let timerInterval = null;
 
         const disposableDomains = [
             'tempmail.com','temp-mail.org','guerrillamail.com','10minutemail.com','mailinator.com',
@@ -191,17 +207,19 @@
         function showSection(section, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            stopTimer();
             const app = document.getElementById('app');
             if (section === 'pdf') {
-                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">📄 Pizarra Virtual</h2><div class="iframe-container"><iframe src="${DRIVE_PDF_URL}" width="100%" height="100%"></iframe></div></div>`;
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">📄 Pizarra Virtual</h2><div class="iframe-container"><iframe src="${DRIVE_PDF_URL}" width="100%" height="100%" allow="autoplay"></iframe></div></div>`;
             } else if (section === 'video') {
-                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">🎥 Video Clase</h2><div class="iframe-container"><iframe src="${DRIVE_VIDEO_URL}" width="100%" height="100%"></iframe></div></div>`;
+                app.innerHTML = `<div class="animate-fade-in"><h2 class="text-xl font-bold mb-4">🎥 Video Clase</h2><div class="iframe-container"><iframe src="${DRIVE_VIDEO_URL}" width="100%" height="100%" allow="autoplay"></iframe></div></div>`;
             }
         }
 
         function prepQuiz(mode, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            stopTimer();
             state = {
                 currentMode: mode,
                 view: 'quiz_home',
@@ -214,19 +232,23 @@
                 isAnswerCorrect: null,
                 emailStatus: null,
                 emailAnalysis: null,
-                emailAnalysisMsg: ''
+                emailAnalysisMsg: '',
+                timeLeft: 0
             };
             render();
         }
 
         function startQuiz() {
             if (state.currentMode === 'deber') {
+                // Deber: 50 preguntas en orden
                 state.activeQuestions = [...quizData];
             } else if (state.currentMode === 'evaluacion') {
+                // Repaso: 20 preguntas aleatorias
                 state.activeQuestions = [...quizData]
                     .sort(() => 0.5 - Math.random())
                     .slice(0, 20);
             } else if (state.currentMode === 'extra') {
+                // Evaluación: 16 preguntas en orden
                 state.activeQuestions = [...quizDataExtra];
             }
             state.view = 'name_input';
@@ -300,7 +322,54 @@
             state.studentName = n;
             state.studentEmail = e;
             state.view = 'playing';
+            if (state.currentMode === 'extra') {
+                startTimer();
+            }
             render();
+        }
+
+        // ---------- TEMPORIZADOR (solo Evaluación / extra) ----------
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function getTimerPhaseClass(remaining) {
+            for (const phase of EVAL_TIMER_PHASES) {
+                if (remaining >= phase.minSeconds) {
+                    return phase.colorClass;
+                }
+            }
+            return EVAL_TIMER_PHASES[EVAL_TIMER_PHASES.length - 1].colorClass;
+        }
+
+        function startTimer() {
+            stopTimer();
+            state.timeLeft = EVAL_TIMER_SECONDS;
+            timerInterval = setInterval(() => {
+                state.timeLeft--;
+                if (state.timeLeft <= 0) {
+                    state.timeLeft = 0;
+                    stopTimer();
+                    state.view = 'results';
+                    render();
+                    enviarCorreo();
+                    return;
+                }
+                const timerEl = document.getElementById('eval-timer');
+                if (timerEl) {
+                    timerEl.textContent = formatTime(state.timeLeft);
+                    timerEl.className = `px-3 py-1.5 rounded-xl border-2 font-black text-sm tabular-nums ${getTimerPhaseClass(state.timeLeft)}`;
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
         }
 
         // ---------- LÓGICA SINGLE + MULTI ----------
@@ -366,6 +435,7 @@
                 state.isAnswerCorrect = null;
                 render();
             } else {
+                stopTimer();
                 state.view = 'results';
                 render();
                 enviarCorreo();
@@ -432,7 +502,7 @@
                 modeDesc = 'Prueba de 20 preguntas seleccionadas al azar.';
             } else if (state.currentMode === 'extra') {
                 modeTitle = '📊 Evaluación';
-                modeDesc = 'Resuelve las 16 preguntas de la Evaluación.';
+                modeDesc = 'Resuelve las 16 preguntas de la Evaluación (tiempo límite: 16 min).';
             }
             
             if (state.view === 'quiz_home') {
@@ -477,7 +547,6 @@
                     ? (Array.isArray(state.selectedAnswer) ? state.selectedAnswer : [])
                     : (state.selectedAnswer ? [state.selectedAnswer] : []);
 
-                // Indicador de selección múltiple (CORREGIDO)
                 const multiHint = multi
                     ? `<p class="text-sm text-sky-600 font-semibold mb-4">
                          Selección múltiple · elige ${q.maxSelect} respuesta${q.maxSelect > 1 ? 's' : ''}
@@ -485,13 +554,21 @@
                        </p>`
                     : '';
 
+                // Timer solo en Evaluación (extra)
+                const timerHtml = (state.currentMode === 'extra')
+                    ? `<div id="eval-timer" class="px-3 py-1.5 rounded-xl border-2 font-black text-sm tabular-nums ${getTimerPhaseClass(state.timeLeft)}">
+                           ${formatTime(state.timeLeft)}
+                       </div>`
+                    : '';
+
                 app.innerHTML = `
                 <div class="animate-fade-in">
-                    <div class="flex justify-between items-center mb-6 px-4">
+                    <div class="flex justify-between items-center mb-6 px-4 gap-4">
                         <span class="font-black text-emerald-600">${state.currentQuestion + 1} / ${state.activeQuestions.length}</span>
-                        <div class="w-48 bg-slate-200 h-2 rounded-full overflow-hidden">
+                        <div class="flex-1 max-w-xs bg-slate-200 h-2 rounded-full overflow-hidden">
                             <div class="bg-emerald-500 h-full transition-all" style="width:${progress}%"></div>
                         </div>
+                        ${timerHtml}
                     </div>
                     <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border">
                         <h2 class="text-2xl font-bold text-slate-800 mb-2 leading-tight">${q.question}</h2>
@@ -512,7 +589,6 @@
                                             style = "border-emerald-300 bg-emerald-50 text-emerald-700";
                                         }
                                     } else {
-                                        // Single / V-F: siempre mostrar la correcta en verde + la incorrecta en rojo
                                         if (opt === q.answer) {
                                             style = "border-emerald-500 bg-emerald-100 text-emerald-800";
                                         } else if (isSelected) {
